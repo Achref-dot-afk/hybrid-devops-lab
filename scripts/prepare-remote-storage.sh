@@ -52,6 +52,7 @@ else
         --resource-group "$RESOURCE_GROUP" \
         --location "$LOCATION" \
         --sku Standard_LRS \
+        --subscription "$SUBSCRIPTION" 
         2>&1) || {
             log_error "Failed to create storage account: $SA_OUTPUT"
             exit 1
