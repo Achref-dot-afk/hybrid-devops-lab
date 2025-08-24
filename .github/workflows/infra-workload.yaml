@@ -7,7 +7,6 @@ env:
   LOCATION: francecentral
   STORAGE_ACCOUNT: storageacc2204
   CONTAINER_NAME: tfstate
-  TF_INIT_ARGS: -backend-config="storage_account_name=${STORAGE_ACCOUNT}" -backend-config="container_name=${CONTAINER_NAME}" -backend-config="use_oidc=true" -backend-config="use_azuread_auth=true"
 
 permissions:
   id-token: write
@@ -20,6 +19,7 @@ jobs:
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.7.5
+      
       - name: 'Az CLI login'
         uses: azure/login@v2
         with:
@@ -33,4 +33,8 @@ jobs:
       - name: Terraform Init
         working-directory: ./Infrastructure
         run: |
-          terraform init $TF_INIT_ARGS
+          terraform init \
+            -backend-config="storage_account_name=$STORAGE_ACCOUNT" \
+            -backend-config="container_name=$CONTAINER_NAME" \
+            -backend-config="use_oidc=true" \
+            -backend-config="use_azuread_auth=true"
