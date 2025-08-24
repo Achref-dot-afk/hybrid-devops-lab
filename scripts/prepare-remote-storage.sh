@@ -42,11 +42,11 @@ fi
 # Create Storage Account
 # -----------------------------
 log_info "Checking if storage account $STORAGE_ACCOUNT exists..."
+az account set --subscription $SUBSCRIPTION
 if az storage account show --name "$STORAGE_ACCOUNT" --resource-group "$RESOURCE_GROUP" --subscription "$SUBSCRIPTION" &>/dev/null; then
     log_warn "Storage account $STORAGE_ACCOUNT already exists. Exiting."
     exit 0
 else
-    az account set --subscription $SUBSCRIPTION
     log_info "Creating storage account: $STORAGE_ACCOUNT..."
     SA_OUTPUT=$(az storage account create \
         --name "$STORAGE_ACCOUNT" \
