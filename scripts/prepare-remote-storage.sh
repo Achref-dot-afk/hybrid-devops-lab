@@ -37,7 +37,7 @@ else
         exit 1
     }
     log_success "Resource group created."
-
+fi
 # -----------------------------
 # Create Storage Account
 # -----------------------------
@@ -70,7 +70,6 @@ STORAGE_KEY=$(az storage account keys list \
         exit 1
 }
 log_success "Storage account key retrieved."
-fi
 
 # -----------------------------
 # Create Blob Container
