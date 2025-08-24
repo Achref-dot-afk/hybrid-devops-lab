@@ -1,26 +1,21 @@
-name: Verify WIF with Azure
+name: Run Azure Login with OIDC
+on: [push]
 
-on:
-  workflow_dispatch:
-
+permissions:
+  id-token: write
+  contents: read
 jobs:
-  test-wif:
+  build-and-deploy:
     runs-on: ubuntu-latest
-    permissions:
-      id-token: write    # needed for OIDC
-      contents: read
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Azure Login using WIF
-        uses: azure/login@v2
+      - name: 'Az CLI login'
+        uses: azure/login@a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0
         with:
           client-id: ${{ secrets.CLIENT_ID }}
           tenant-id: ${{ secrets.TENANT_ID }}
           subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
-          enable-oidc: true
 
-      - name: Show Azure identity
-        run: az account show
+      - name: 'Run az commands'
+        run: |
+          az account show
+          az group list
