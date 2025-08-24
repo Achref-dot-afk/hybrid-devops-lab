@@ -2,6 +2,13 @@ name: Run Azure Login with OIDC
 on:
   workflow_dispatch:
 
+env:
+  RESOURCE_GROUP: rg-terraform-resources
+  LOCATION: eastus
+  STORAGE_ACCOUNT: stterraformstate
+  CONTAINER_NAME: tfstate
+  TF_INIT_ARGS: -backend-config="tenant_id=${{ secrets.TENANT_ID }}" -backend-config="client_id=${{ secrets.CLIENT_ID }}" -backend-config="storage_account_name=${STORAGE_ACCOUNT}" -backend-config="container_name=${CONTAINER_NAME}""
+
 permissions:
   id-token: write
   contents: read
@@ -15,9 +22,12 @@ jobs:
           client-id: ${{ secrets.CLIENT_ID }}
           tenant-id: ${{ secrets.TENANT_ID }}
           subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
-          enable-oidc: true
 
-      - name: 'Run az commands'
+      - name: Prepare remote storage
         run: |
-          az account show
-          az group list
+          chmod +x ./scripts/prepare-remote-storage.sh
+          ./scripts/prepare-remote-storage.sh $RESOURCE_GROUP $LOCATION $STORAGE_ACCOUNT $CONTAINER_NAME
+      - name: Terraform Init
+        working-directory: ./Infrastructure
+        run: |
+          terraform init $TF_INIT_ARGS
