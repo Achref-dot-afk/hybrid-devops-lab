@@ -21,7 +21,8 @@ fi
 RESOURCE_GROUP="$1"
 STORAGE_ACCOUNT="$2"
 CONTAINER="$3"
-LOCATION="${4:-eastus}"  # Default to eastus if not provided
+SUBSCRIPTION="$4"
+LOCATION="${5:-eastus}"  # Default to eastus if not provided
 
 # -----------------------------
 # Create Resource Group
@@ -41,7 +42,7 @@ else
 # Create Storage Account
 # -----------------------------
 log_info "Checking if storage account $STORAGE_ACCOUNT exists..."
-if az storage account show --name "$STORAGE_ACCOUNT" --resource-group "$RESOURCE_GROUP" &>/dev/null; then
+if az storage account show --name "$STORAGE_ACCOUNT" --resource-group "$RESOURCE_GROUP" --subscription "$SUBSCRIPTION" &>/dev/null; then
     log_warn "Storage account $STORAGE_ACCOUNT already exists. Exiting."
     exit 0
 else
