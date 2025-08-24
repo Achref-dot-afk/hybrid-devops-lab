@@ -13,31 +13,21 @@ log_success() { echo -e "[\e[1;92mSUCCESS\e[0m] $*"; }
 RESOURCE_GROUP="$1"
 STORAGE_ACCOUNT="$2"
 CONTAINER="$3"
-SUBSCRIPTION="$4"
-LOCATION="${5:-eastus}"  # Default to eastus if not provided
+LOCATION="${4:-eastus}"  # Default to eastus if not provided
 
 # -----------------------------
-# Set subscription if provided
+# Set the current subscription
 # -----------------------------
-if [[ -n "$SUBSCRIPTION" ]]; then
-    log_info "Setting subscription to: $SUBSCRIPTION"
-    SUBSCRIPTION="--subscription $SUBSCRIPTION"
-    
-    # Verify subscription exists
-    if ! az account show --subscription "$SUBSCRIPTION" &>/dev/null; then
-        log_error "Subscription '$SUBSCRIPTION' not found or not accessible"
-        log_info "Available subscriptions:"
-        az account list --output table
-        exit 1
-    fi
-else
-    SUBSCRIPTION=""
-    log_info "Using default subscription"
-fi
+
+SUBSCRIPTION=$(az account show --query "id" -o tsv 2>&1) || {
+    log_error "Failed to get current subscription. Please ensure you are logged in to Azure CLI."
+    exit 1
+}
 
 # -----------------------------
 # Create Resource Group
 # -----------------------------
+
 log_info "Checking if resource group $RESOURCE_GROUP exists..."
 if az group show --name "$RESOURCE_GROUP" &>/dev/null; then
     log_warn "Resource group $RESOURCE_GROUP already exists. Exiting."
