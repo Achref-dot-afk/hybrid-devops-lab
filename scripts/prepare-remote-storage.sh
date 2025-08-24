@@ -10,19 +10,30 @@ log_warn()    { echo -e "[\e[1;93mWARN\e[0m] $*"; }
 log_error()   { echo -e "[\e[1;91mERROR\e[0m] $*"; }
 log_success() { echo -e "[\e[1;92mSUCCESS\e[0m] $*"; }
 
-# -----------------------------
-# Check required arguments
-# -----------------------------
-if [[ $# -lt 3 ]]; then
-    log_error "Usage: $0 <RESOURCE_GROUP> <STORAGE_ACCOUNT> <CONTAINER>"
-    exit 1
-fi
-
 RESOURCE_GROUP="$1"
 STORAGE_ACCOUNT="$2"
 CONTAINER="$3"
 SUBSCRIPTION="$4"
 LOCATION="${5:-eastus}"  # Default to eastus if not provided
+
+# -----------------------------
+# Set subscription if provided
+# -----------------------------
+if [[ -n "$SUBSCRIPTION" ]]; then
+    log_info "Setting subscription to: $SUBSCRIPTION"
+    SUBSCRIPTION="--subscription $SUBSCRIPTION"
+    
+    # Verify subscription exists
+    if ! az account show --subscription "$SUBSCRIPTION" &>/dev/null; then
+        log_error "Subscription '$SUBSCRIPTION' not found or not accessible"
+        log_info "Available subscriptions:"
+        az account list --output table
+        exit 1
+    fi
+else
+    SUBSCRIPTION=""
+    log_info "Using default subscription"
+fi
 
 # -----------------------------
 # Create Resource Group
@@ -42,7 +53,6 @@ fi
 # Create Storage Account
 # -----------------------------
 log_info "Checking if storage account $STORAGE_ACCOUNT exists..."
-az account set --subscription $SUBSCRIPTION
 if az storage account show --name "$STORAGE_ACCOUNT" --resource-group "$RESOURCE_GROUP" --subscription "$SUBSCRIPTION" &>/dev/null; then
     log_warn "Storage account $STORAGE_ACCOUNT already exists. Exiting."
     exit 0
