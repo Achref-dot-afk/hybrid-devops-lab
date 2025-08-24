@@ -7,7 +7,7 @@ env:
   LOCATION: francecentral
   STORAGE_ACCOUNT: storageacc2204
   CONTAINER_NAME: tfstate
-  TF_INIT_ARGS: -backend-config="storage_account_name=${STORAGE_ACCOUNT}" -backend-config="container_name=${CONTAINER_NAME}"
+  TF_INIT_ARGS: -backend-config="storage_account_name=${STORAGE_ACCOUNT}" -backend-config="container_name=${CONTAINER_NAME}" -backend-config="use_oidc=true" -backend-config="use_azuread_auth=true"
 
 permissions:
   id-token: write
