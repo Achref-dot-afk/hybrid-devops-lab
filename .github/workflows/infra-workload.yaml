@@ -29,7 +29,7 @@ jobs:
       - name: Prepare remote storage
         run: |
           chmod +x ./scripts/prepare-remote-storage.sh
-          ./scripts/prepare-remote-storage.sh $RESOURCE_GROUP $LOCATION $STORAGE_ACCOUNT $CONTAINER_NAME
+          ./scripts/prepare-remote-storage.sh $RESOURCE_GROUP $STORAGE_ACCOUNT $CONTAINER_NAME $LOCATION
       - name: Terraform Init
         working-directory: ./Infrastructure
         run: |
