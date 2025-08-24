@@ -4,8 +4,8 @@ on:
 
 env:
   RESOURCE_GROUP: rg-terraform-resources
-  LOCATION: eastus
-  STORAGE_ACCOUNT: stterraformstate
+  LOCATION: francecentral
+  STORAGE_ACCOUNT: storageacc2204
   CONTAINER_NAME: tfstate
   TF_INIT_ARGS: -backend-config="tenant_id=${{ secrets.TENANT_ID }}" -backend-config="client_id=${{ secrets.CLIENT_ID }}" -backend-config="storage_account_name=${STORAGE_ACCOUNT}" -backend-config="container_name=${CONTAINER_NAME}""
 
@@ -26,10 +26,6 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Prepare remote storage
-        run: |
-          chmod +x ./scripts/prepare-remote-storage.sh
-          ./scripts/prepare-remote-storage.sh $RESOURCE_GROUP $STORAGE_ACCOUNT $CONTAINER_NAME $LOCATION
       - name: Terraform Init
         working-directory: ./Infrastructure
         run: |
