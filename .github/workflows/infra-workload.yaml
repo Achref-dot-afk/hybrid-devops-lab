@@ -16,6 +16,10 @@ jobs:
   login-and-terraform-init:
     runs-on: ubuntu-latest
     steps:
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.7.5
       - name: 'Az CLI login'
         uses: azure/login@v2
         with:
