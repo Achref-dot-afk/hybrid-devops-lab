@@ -37,4 +37,5 @@ jobs:
             -backend-config="storage_account_name=$STORAGE_ACCOUNT" \
             -backend-config="container_name=$CONTAINER_NAME" \
             -backend-config="use_oidc=true" \
+            -backend-config="key=terraform.tfstate" \
             -backend-config="use_azuread_auth=true"
