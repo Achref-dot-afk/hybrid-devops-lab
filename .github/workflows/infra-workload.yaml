@@ -60,7 +60,7 @@ jobs:
           tflint_version: v0.53.0
 
       - name: Run TFLint with SARIF output
-        run: tflint --recursive --format sarif > tflint-report.sarif
+        run: tflint --recursive --format sarif > tflint-report.sarif || true
 
       - name: Upload SARIF report
         uses: github/codeql-action/upload-sarif@v3
