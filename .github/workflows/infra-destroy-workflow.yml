@@ -4,6 +4,10 @@ on:
   workflow_dispatch:
 
 env:
+  RESOURCE_GROUP: rg-terraform-resources
+  LOCATION: francecentral
+  STORAGE_ACCOUNT: storageacc2204
+  CONTAINER_NAME: tfstate
   ENV: ${{ vars.ENV_TYPE }}
 
 permissions:
@@ -27,6 +31,21 @@ jobs:
           client-id: ${{ secrets.CLIENT_ID }}
           tenant-id: ${{ secrets.TENANT_ID }}
           subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
+
+      - name: Terraform Init
+        env:
+          tenant_id: ${{ secrets.TENANT_ID }}
+          client_id: ${{ secrets.CLIENT_ID }}
+        working-directory: ./Infrastructure
+        run: |
+          terraform init \
+            -backend-config="storage_account_name=$STORAGE_ACCOUNT" \
+            -backend-config="container_name=$CONTAINER_NAME" \
+            -backend-config="use_oidc=true" \
+            -backend-config="key=terraform.tfstate" \
+            -backend-config="tenant_id=$tenant_id" \
+            -backend-config="client_id=$client_id" \
+            -backend-config="use_azuread_auth=true"
 
       - name: Terraform Destroy
         working-directory: ./Infrastructure
