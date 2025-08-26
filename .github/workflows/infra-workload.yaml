@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main  
-  workflow_dispatch:   # allow manual trigger
 
 env:
   RESOURCE_GROUP: rg-terraform-resources
@@ -65,7 +64,6 @@ jobs:
           terraform apply -auto-approve tfplan.binary
 
   tf-destroy:
-    if: ${{ github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - name: Setup Terraform
@@ -83,11 +81,17 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Terraform Destroy
+      # Manual approval step
+      - name: Approval before destroy
         uses: trstringer/manual-approval@v1
         with:
-          APPROVALS: 1
-          MESSAGE: 'Are you sure you want to destroy the infrastructure?'
+          approvers: ${{ github.actor }}
+          minimum-approvals: 1
+          message: '⚠️ Are you sure you want to destroy the infrastructure?'
+
+      # Actual destroy step
+      - name: Terraform Destroy
         working-directory: ./Infrastructure
         run: |
           terraform destroy -auto-approve -var-file=./vars/$ENV.env.tfvars
+
