@@ -9,6 +9,7 @@ env:
   LOCATION: francecentral
   STORAGE_ACCOUNT: storageacc2204
   CONTAINER_NAME: tfstate
+  ENV_TYPE: ${{env.ENV_TYPE}} # dev, preprod, prod
 
 permissions:
   id-token: write
@@ -51,8 +52,13 @@ jobs:
       - name: Terraform Plan
         working-directory: ./Infrastructure
         run: |
-          terraform plan -out=tfplan.binary
+          terraform plan -out=tfplan.binary -var-file=./vars/$ENV_TYPE.env.tfvars
           terraform show -json tfplan.binary > tfplan.json
+
+      - name: Terraform Apply
+        run: |
+          terraform apply -auto-approve tfplan.binary
+
 
 
 
