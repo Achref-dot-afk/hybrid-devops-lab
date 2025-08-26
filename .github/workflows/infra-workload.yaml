@@ -87,7 +87,10 @@ jobs:
         with:
           approvers: ${{ github.actor }}
           minimum-approvals: 1
-          message: '⚠️ Are you sure you want to destroy the infrastructure?'
+          secret: manual_destroy
+          issue-title: 'Manual approval needed'
+          issue-body: '⚠️ Are you sure you want to destroy the infrastructure?'
+
 
       # Actual destroy step
       - name: Terraform Destroy
