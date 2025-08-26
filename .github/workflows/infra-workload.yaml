@@ -3,6 +3,12 @@ on:
   push:
     branches:
       - main  
+  workflow_dispatch:   # allow manual trigger
+    inputs:
+      destroy:
+        description: "Run terraform destroy?"
+        required: true
+        default: "false"
 
 env:
   RESOURCE_GROUP: rg-terraform-resources
@@ -59,6 +65,12 @@ jobs:
         working-directory: ./Infrastructure
         run: |
           terraform apply -auto-approve tfplan.binary
+
+      - name: Terraform Destroy
+        working-directory: ./Infrastructure
+        if: ${{ github.event.inputs.destroy == 'true' }} 
+        run: |
+          terraform destroy -auto-approve -var-file=./vars/$ENV.env.tfvars
 
 
 
