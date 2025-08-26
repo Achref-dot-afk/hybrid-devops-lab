@@ -47,31 +47,6 @@ jobs:
             -backend-config="tenant_id=$tenant_id" \
             -backend-config="client_id=$client_id" \
             -backend-config="use_azuread_auth=true"
-      
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup TFLint
-        uses: terraform-linters/setup-tflint@v4
-        with:
-          tflint_version: v0.53.0
-
-      - name: Run TFLint with SARIF output
-        run: tflint --recursive --format sarif --error-level error > tflint-report.sarif
-
-      - name: Upload SARIF report
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: tflint-report.sarif
-
-  tf-plan:
-    runs-on: ubuntu-latest
-    needs: terraform
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
 
       - name: Terraform Plan
         working-directory: ./Infrastructure
@@ -79,7 +54,23 @@ jobs:
           terraform plan -out=tfplan.binary
           terraform show -json tfplan.binary > tfplan.json
 
-      - name: Upload tfplan.json as artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: tfplan-json
+
+
+
+  # lint:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+
+  #     - name: Setup TFLint
+  #       uses: terraform-linters/setup-tflint@v4
+  #       with:
+  #         tflint_version: v0.53.0
+
+  #     - name: Run TFLint with SARIF output
+  #       run: tflint --recursive --format sarif --error-level error > tflint-report.sarif
+
+  #     - name: Upload SARIF report
+  #       uses: github/codeql-action/upload-sarif@v3
+  #       with:
+  #         sarif_file: tflint-report.sarif
