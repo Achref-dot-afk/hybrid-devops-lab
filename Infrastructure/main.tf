@@ -7,3 +7,8 @@ resource "random_integer" "name" {
   max = 9999
   min = 1000
 }
+
+resource "random_pet" "name" {
+  length = 5
+  separator = "-"
+}
