@@ -12,7 +12,7 @@ permissions:
   id-token: write
   contents: read
 jobs:
-  login-and-terraform-init:
+  terraform:
     runs-on: ubuntu-latest
     steps:
       - name: Setup Terraform
@@ -44,3 +44,26 @@ jobs:
             -backend-config="tenant_id=$tenant_id" \
             -backend-config="client_id=$client_id" \
             -backend-config="use_azuread_auth=true"
+      
+      - name: Terraform format check
+        working-directory: ./Infrastructure
+        run: |
+          terraform fmt -check -recursive
+  lint:
+  name: Terraform Lint
+  runs-on: ubuntu-latest
+  steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup TFLint
+      uses: terraform-linters/setup-tflint@v4
+      with:
+        tflint_version: v0.53.0
+
+    - name: Run TFLint with SARIF output
+      run: tflint --recursive --format sarif > tflint-report.sarif
+
+    - name: Upload SARIF report
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: tflint-report.sarif

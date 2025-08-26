@@ -1,22 +1,7 @@
 #!/bin/bash
 
 # -----------------------------
-# Script to create Azure Storage for Terraform Remote State
-# -----------------------------
-
-# Logging functions
-log_info()    { echo -e "[\e[1;94mINFO\e[0m] $*"; }
-log_warn()    { echo -e "[\e[1;93mWARN\e[0m] $*"; }
-log_error()   { echo -e "[\e[1;91mERROR\e[0m] $*"; }
-log_success() { echo -e "[\e[1;92mSUCCESS\e[0m] $*"; }
-
-RESOURCE_GROUP="$1"
-STORAGE_ACCOUNT="$2"
-CONTAINER="$3"
-LOCATION="${4:-eastus}"  # Default to eastus if not provided
-
-# -----------------------------
-# Set the current subscription
+# This is a number of commands to create a resource group, a storage account, and a blob container in Azure (advise: run them manually one by one)
 # -----------------------------
 
 SUBSCRIPTION=$(az account show --query "id" -o tsv 2>&1) || {
@@ -93,3 +78,11 @@ else
     }
     log_success "Blob container created."
 fi
+
+# -----------------------------
+# Assign at storage account level
+# -----------------------------
+az role assignment create \
+  --assignee <client-id-of-your-gha-app> \
+  --role "Storage Blob Data Contributor" \
+  --scope /subscriptions/<sub-id>/resourceGroups/rg-terraform-resources/providers/Microsoft.Storage/storageAccounts/storageacc2204
