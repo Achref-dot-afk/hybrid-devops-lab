@@ -56,6 +56,7 @@ jobs:
           terraform show -json tfplan.binary > tfplan.json
 
       - name: Terraform Apply
+        working-directory: ./Infrastructure
         run: |
           terraform apply -auto-approve tfplan.binary
 
