@@ -16,7 +16,7 @@ enabled = true
  
 # Disallow // comments in favor of #.
 rule "terraform_comment_syntax" {
-enabled = false
+enabled = true
 }
  
 # Disallow output declarations without description.
