@@ -1,4 +1,4 @@
-name: Run Azure Login with OIDC
+name: Infrastructure Provisionning
 
 on:
   push:
@@ -18,7 +18,7 @@ permissions:
   security-events: write 
 
 jobs:
-  terraform:
+  terraform-plan-apply:
     if: ${{ github.event_name == 'push' }}
     runs-on: ubuntu-latest
     steps:
@@ -52,6 +52,12 @@ jobs:
             -backend-config="client_id=$client_id" \
             -backend-config="use_azuread_auth=true"
 
+      - name: Terraform Checkov
+        uses: bridgecrewio/checkov-action@master
+        with:
+          directory: ./Infrastructure
+          framework: terraform
+          
       - name: Terraform Plan
         working-directory: ./Infrastructure
         run: |
