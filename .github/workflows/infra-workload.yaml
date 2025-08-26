@@ -57,7 +57,12 @@ jobs:
         with:
           directory: ./Infrastructure
           framework: terraform
-          
+
+      - name: Upload Checkov SARIF report
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: results.sarif
+
       - name: Terraform Plan
         working-directory: ./Infrastructure
         run: |
