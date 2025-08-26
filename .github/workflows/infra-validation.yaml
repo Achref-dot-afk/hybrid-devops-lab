@@ -1,0 +1,96 @@
+name: Infrastructure Validation (Run on Push to feature/*)
+
+on:
+  push:
+    branches:
+      - 'feature/*' 
+
+env:
+  RESOURCE_GROUP: rg-terraform-resources
+  LOCATION: francecentral
+  STORAGE_ACCOUNT: storageacc2204
+  CONTAINER_NAME: tfstate
+  ENV: ${{ vars.ENV_TYPE }} # dev, preprod, prod
+
+permissions:
+  id-token: write
+  contents: read
+  security-events: write 
+
+jobs:
+  terraform-plan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.7.5
+      
+      - name: 'Az CLI login'
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.CLIENT_ID }}
+          tenant-id: ${{ secrets.TENANT_ID }}
+          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
+      
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Cache plugin dir
+        uses: actions/cache@v4
+        with:
+          path: ~/.tflint.d/plugins
+          key: ${{ matrix.os }}-tflint-${{ hashFiles('.tflint.hcl') }}
+        
+      - name: Setup TFLint
+        uses: terraform-linters/setup-tflint@v4
+        with:
+          tflint_version: v0.52.0
+    
+      - name: Show version
+        run: tflint --version
+
+      - name: Init TFLint
+        working-directory: ./Infrastructure
+        run: tflint --init
+        env:
+            # https://github.com/terraform-linters/tflint/blob/master/docs/user-guide/plugins.md#avoiding-rate-limiting
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Run TFLint
+        working-directory: ./Infrastructure
+        run: tflint -f compact
+      
+      - name: Terraform Init
+        env:
+          tenant_id: ${{ secrets.TENANT_ID }}
+          client_id: ${{ secrets.CLIENT_ID }}
+        working-directory: ./Infrastructure
+        run: |
+          terraform init \
+            -backend-config="storage_account_name=$STORAGE_ACCOUNT" \
+            -backend-config="container_name=$CONTAINER_NAME" \
+            -backend-config="use_oidc=true" \
+            -backend-config="key=terraform.tfstate" \
+            -backend-config="tenant_id=$tenant_id" \
+            -backend-config="client_id=$client_id" \
+            -backend-config="use_azuread_auth=true"
+
+      - name: Terraform Checkov
+        uses: bridgecrewio/checkov-action@master
+        with:
+          directory: ./Infrastructure
+          framework: terraform
+        continue-on-error: true
+
+      - name: Upload Checkov SARIF report
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: results.sarif
+
+      - name: Terraform Plan
+        working-directory: ./Infrastructure
+        run: |
+          terraform plan -out=tfplan.binary -var-file=./vars/$ENV.env.tfvars
+          terraform show -json tfplan.binary > tfplan.json
+

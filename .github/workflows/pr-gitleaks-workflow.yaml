@@ -1,0 +1,17 @@
+name: Pull Request - GitLeaks
+on:
+  pull_request:
+  workflow_dispatch:
+jobs:
+  scan:
+    name: gitleaks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+# Note: The admin of the repository must check "Require status checks to pass before merging" in the branch protection rules for this workflow to be effective. Or we can bypass this even if it fails.
