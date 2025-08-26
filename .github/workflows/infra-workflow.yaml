@@ -60,7 +60,7 @@ jobs:
       - name: Run TFLint
         working-directory: ./Infrastructure
         run: tflint -f compact
-        continue-on-error: true
+
       
       - name: Terraform Init
         env:
