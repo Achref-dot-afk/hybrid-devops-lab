@@ -4,11 +4,6 @@ on:
     branches:
       - main  
   workflow_dispatch:   # allow manual trigger
-    inputs:
-      destroy:
-        description: "Run terraform destroy?"
-        required: true
-        default: "false"
 
 env:
   RESOURCE_GROUP: rg-terraform-resources
@@ -66,9 +61,28 @@ jobs:
         run: |
           terraform apply -auto-approve tfplan.binary
 
+  tf-destroy:
+    if: ${{ github.event_name == 'workflow_dispatch' }}
+    needs: terraform
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.7.5
+      
+      - name: 'Az CLI login'
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.CLIENT_ID }}
+          tenant-id: ${{ secrets.TENANT_ID }}
+          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
+      
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
       - name: Terraform Destroy
         working-directory: ./Infrastructure
-        if: ${{ github.event.inputs.destroy == 'true' }} 
         run: |
           terraform destroy -auto-approve -var-file=./vars/$ENV.env.tfvars
 
