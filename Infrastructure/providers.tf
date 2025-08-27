@@ -9,6 +9,6 @@ terraform {
       version = "~> 3.1"
     }
   }
-
+  required_version = ">= 0.14"
   backend "azurerm" {}
 }
