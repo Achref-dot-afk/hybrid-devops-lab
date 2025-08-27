@@ -5,4 +5,4 @@
 - Create a Blob Container
 - Assign the role "Storage Blob Data Contributor" to allow terraform to write/read the state blob object
 - Register "Microsoft.Storage" Resource Provider because the requests to azure services go through these providers and
- if a provider isn’t registered in your subscription, you cannot create or manage resources from the service.
+ if a provider isn’t registered in your subscription, you cannot create or manage resources from that service.
