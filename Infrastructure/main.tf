@@ -8,7 +8,7 @@ resource "random_integer" "name" {
   min = 1000
 }
 
-resource "random_pet" "new" {
+resource "random_pet" "w" {
   length = 5
   separator = "-"
 }
