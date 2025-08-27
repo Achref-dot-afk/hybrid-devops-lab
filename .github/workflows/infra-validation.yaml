@@ -26,7 +26,6 @@ jobs:
         with:
           terraform_version: 1.7.5
 
-
       - name: 'Az CLI login'
         uses: azure/login@v2
         with:
@@ -62,6 +61,7 @@ jobs:
         working-directory: ./Infrastructure
         run: tflint -f compact
         continue-on-error: true
+        
       - name: Terraform Init
         env:
           tenant_id: ${{ secrets.TENANT_ID }}
