@@ -10,7 +10,7 @@ resource "azurerm_network_interface" "worker-nic" {
   }
 }
 
-resource "azurerm_virtual_machine" "master" {
+resource "azurerm_virtual_machine" "worker" {
   name                  = "${var.environment}-jenkins-worker"
   location              = var.location
   resource_group_name   = var.rg_name
