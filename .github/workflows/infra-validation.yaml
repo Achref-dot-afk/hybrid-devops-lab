@@ -3,7 +3,7 @@ name: Infrastructure Validation (Run on PR)
 on:
   pull_request:
     branches:
-      - 'feature/**'
+      - 'main'
 
 env:
   RESOURCE_GROUP: rg-terraform-resources
