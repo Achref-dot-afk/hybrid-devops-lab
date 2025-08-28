@@ -60,7 +60,6 @@ jobs:
       - name: Run TFLint
         working-directory: ./Infrastructure
         run: tflint -f compact
-
       
       - name: Terraform Init
         env:
