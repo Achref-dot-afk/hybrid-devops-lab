@@ -59,7 +59,7 @@ jobs:
         working-directory: ./Infrastructure
         run: tflint -f compact
         continue-on-error: true
-      
+        
       - name: Terraform Init
         env:
           tenant_id: ${{ secrets.TENANT_ID }}
