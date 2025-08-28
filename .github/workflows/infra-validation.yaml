@@ -1,4 +1,4 @@
-name: Infrastructure Validation (Run on Push to feature/*)
+name: Infrastructure Validation (Run on PR)
 
 on:
   pull_request:
