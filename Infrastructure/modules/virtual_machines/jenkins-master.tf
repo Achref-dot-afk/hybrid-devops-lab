@@ -15,7 +15,7 @@ resource "azurerm_virtual_machine" "master" {
   location              = var.location
   resource_group_name   = var.rg_name
   network_interface_ids = [azurerm_network_interface.master-nic.id]
-  vm_size               = "Standard_D4as_v5"
+  vm_size               = "Standard_D4ds_v5"
 
   storage_image_reference {
     publisher = "Canonical"
