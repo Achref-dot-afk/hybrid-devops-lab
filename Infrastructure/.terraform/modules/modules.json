@@ -1,0 +1,1 @@
+{"Modules":[{"Key":"","Source":"","Dir":"."},{"Key":"virtual_machines","Source":"./modules/virtual_machines","Dir":"modules/virtual_machines"},{"Key":"vpc","Source":"./modules/vpc","Dir":"modules/vpc"}]}

@@ -9,7 +9,8 @@ rule "terraform_deprecated_interpolation" {
   enabled = true
 }
  
-# Disallow variables, data sources, and locals that are declared but never used.
+# Disallow variables, data sources, and locals that are declared but never used
+
 rule "terraform_unused_declarations" {
 enabled = true
 }
