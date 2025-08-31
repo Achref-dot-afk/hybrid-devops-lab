@@ -103,5 +103,5 @@ jobs:
           TF_VAR_client_id: ${{ secrets.CLIENT_ID }}
           TF_VAR_subscription_id: ${{ secrets.SUBSCRIPTION_ID }}
         run: |
-          terraform apply -auto-approve tfplan.binary -input=false
+          terraform apply -input=false -auto-approve tfplan.binary 
 
