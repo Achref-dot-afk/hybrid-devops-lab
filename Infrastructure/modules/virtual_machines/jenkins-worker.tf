@@ -15,7 +15,7 @@ resource "azurerm_virtual_machine" "worker" {
   location              = var.location
   resource_group_name   = var.rg_name
   network_interface_ids = [azurerm_network_interface.worker-nic.id]
-  vm_size               = "Standard_D4_v3"
+  vm_size               = "Standard_D2s_v3"
 
   storage_image_reference {
     publisher = "Canonical"
@@ -30,7 +30,7 @@ resource "azurerm_virtual_machine" "worker" {
     managed_disk_type = "Standard_LRS"
   }
   os_profile {
-    computer_name = "jenkins_worker"
+    computer_name = "worker"
     admin_username = "jenkins_worker"
   }
   os_profile_linux_config {
