@@ -1,9 +1,9 @@
 name: Infrastructure Validation (Run on Push to feature/*)
 
 on:
-  push:
+  pull_request:
     branches:
-      - 'feature/*' 
+      - 'main'
 
 env:
   RESOURCE_GROUP: rg-terraform-resources
