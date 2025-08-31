@@ -74,7 +74,7 @@ jobs:
             -backend-config="use_oidc=true" \
             -backend-config="key=terraform.tfstate" \
             -backend-config="tenant_id=$tenant_id" \
-            -backend-config="client_id=$client_id"
+            -backend-config="client_id=$client_id" \
             -backend-config="use_azuread_auth=true"
 
       - name: Terraform Checkov
