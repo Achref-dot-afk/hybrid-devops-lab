@@ -30,7 +30,7 @@ resource "azurerm_virtual_machine" "master" {
     managed_disk_type = "Standard_LRS"
   }
   os_profile {
-    computer_name = "jenkins_master"
+    computer_name = "master"
     admin_username = "jenkins_master"
   }
   os_profile_linux_config {
