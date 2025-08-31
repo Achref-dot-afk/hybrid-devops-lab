@@ -15,7 +15,7 @@ resource "azurerm_virtual_machine" "worker" {
   location              = var.location
   resource_group_name   = var.rg_name
   network_interface_ids = [azurerm_network_interface.worker-nic.id]
-  vm_size               = "Standard_DS1_v2"
+  vm_size               = "Standard_D4pls_v6"
 
   storage_image_reference {
     publisher = "Canonical"
