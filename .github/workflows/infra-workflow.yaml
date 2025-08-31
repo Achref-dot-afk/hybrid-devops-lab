@@ -90,12 +90,18 @@ jobs:
 
       - name: Terraform Plan
         working-directory: ./Infrastructure
+        env:
+          TF_VAR_client_id: ${{ secrets.CLIENT_ID }}
+          TF_VAR_subscription_id: ${{ secrets.SUBSCRIPTION_ID }}
         run: |
-          terraform plan -out=tfplan.binary -var-file=./vars/$ENV.env.tfvars
+          terraform plan -out=tfplan.binary -var-file=./vars/$ENV.env.tfvars -input=false
           terraform show -json tfplan.binary > tfplan.json
 
       - name: Terraform Apply
         working-directory: ./Infrastructure
+        env:
+          TF_VAR_client_id: ${{ secrets.CLIENT_ID }}
+          TF_VAR_subscription_id: ${{ secrets.SUBSCRIPTION_ID }}
         run: |
-          terraform apply -auto-approve tfplan.binary
+          terraform apply -auto-approve tfplan.binary -input=false
 
