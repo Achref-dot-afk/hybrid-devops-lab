@@ -17,5 +17,5 @@ module "virtual_machines" {
     rg_name = data.azurerm_resource_group.rg.name
     master_subnet_id = module.vpc.master_subnet_id
     worker_subnet_id = module.vpc.worker_subnet_id
-
+    nsg_rules = var.nsg_rules
 }
