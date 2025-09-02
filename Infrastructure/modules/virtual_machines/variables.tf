@@ -37,3 +37,19 @@ variable "worker_ssh_key" {
   default = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCupF1jr1MkZMmvKU+9VNYaPbsHFrwRwXnQVFB/2oRKaMl0iQaA9j0o+9bqhM+9InmWLRZGe4cPfOnHJvUPlP7iSja5ur7Wb6W9hggRDnphXOpNAit6DGachKBXPeGiI16kcXG7Nv1EvjJp2UpPTzfvlU1N5ZvGfpxfvya2eVQKPUuErq1IBgUkh174UTSWGDt2XW88Q09Ejrd6xvHNiy3JnTQlPW64NIdg81JsolTnNUzUIJPEc0yeEkB4OaU2U9hdDr8STOsGncTxDtuS4r9jvGDuaAeLp7CeI2Mr+dVjILkQQ3/ntOK2alTHJfARaRcGuPKNZFTyZsrSfJlfYZe1 rsa-key-20250828"
   
 }
+
+variable "nsg_rules" {
+  description = "List of NSG rules"
+  type = list(object({
+    name                       = string
+    priority                   = number
+    direction                  = string
+    access                     = string
+    protocol                   = string
+    source_port_range          = string
+    destination_port_range     = string
+    source_address_prefix      = string
+    destination_address_prefix = string
+  }))
+  default = []
+}
