@@ -1,0 +1,15 @@
+- name: Configure Jenkins Master
+  hosts: master
+  become: true
+  gather_facts: true
+  roles:
+    - common
+    - jenkins_master
+
+- name: Configure Jenkins Workers
+  hosts: workers
+  become: true
+  gather_facts: true
+  roles:
+    - common
+    - jenkins_worker

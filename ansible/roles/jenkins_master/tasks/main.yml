@@ -1,0 +1,36 @@
+- name: Add Jenkins repository key
+  apt_key:
+    url: https://pkg.jenkins.io/debian-stable/jenkins.io.key
+    dest: /usr/share/keyrings/jenkins-keyring.asc
+    mode: '0644'
+    state: present
+  become: true
+
+- name: Convert key to binary format
+  ansible.builtin.command:
+    cmd: gpg --dearmor -o /usr/share/keyrings/jenkins-key.gpg /usr/share/keyrings/jenkins-key.asc
+  args:
+    creates: /usr/share/keyrings/jenkins-key.gpg
+  become: true
+
+- name: Append Jenkins repository to sources list
+  ansible.builtin.apt_repository:
+    name: jenkins
+    baseurl: https://pkg.jenkins.io/debian-stable/
+    gpgcheck: yes
+    enabled: yes
+  become: true
+
+- name: Install Jenkins
+  apt:
+    name: jenkins
+    state: present
+  become: true
+
+- name: Ensure Jenkins is started and enabled
+  ansible.builtin.service:
+    name: jenkins
+    state: started
+    enabled: true
+  become: true
+
