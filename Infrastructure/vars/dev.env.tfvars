@@ -1,5 +1,3 @@
-location = "francecentral"
-environment = "dev"
 nsg_rules = [
   {
     name                       = "Allow-SSH"

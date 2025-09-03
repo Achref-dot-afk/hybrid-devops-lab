@@ -16,6 +16,7 @@ resource "azurerm_virtual_machine" "worker" {
   resource_group_name   = var.rg_name
   network_interface_ids = [azurerm_network_interface.worker-nic.id]
   vm_size               = "Standard_F2s_v2"
+  delete_data_disks_on_termination = true
 
   storage_image_reference {
     publisher = "Canonical"
