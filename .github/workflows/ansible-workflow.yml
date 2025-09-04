@@ -1,0 +1,41 @@
+name: Ansible Deploy
+
+on:
+  workflow_dispatch:  
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/master/.ssh
+          mkdir -p ~/worker/.ssh
+          echo "${{ secrets.MASTER_SSH_KEY }}" > ~/master/.ssh/id_rsa
+          echo "${{ secrets.WORKER_SSH_KEY }}" > ~/worker/.ssh/id_rsa
+          chmod 600 ~/master/.ssh/id_rsa
+          chmod 600 ~/worker/.ssh/id_rsa
+
+      - name: Install Ansible
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ansible
+
+      - name: Create inventory file
+        run: |
+          cat > ./ansible/inventory.ini <<EOF
+          [master]
+          ansible_host=4.211.249.189 ansible_user=jenkins_master ansible_ssh_private_key_file=~/master/.ssh/id_rsa
+
+          [worker]
+          ansible_host=20.50.10.13 ansible_user=jenkins_worker ansible_ssh_private_key_file=~/worker/.ssh/id_rsa
+          EOF
+
+      - name: Run Ansible playbook
+        working-directory: ./ansible
+        run: |
+          ansible-playbook -i inventory.ini playbooks/setup-jenkins.yml
