@@ -1,38 +1,69 @@
 name: Ansible Deploy
 
 on:
-  workflow_dispatch:  
+  workflow_dispatch:
+  push:
+    branches: [ main, master ]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up SSH key
+      - name: Set up SSH keys and configuration
         run: |
-          mkdir -p ~/master/.ssh
-          mkdir -p ~/worker/.ssh
-          echo "${{ secrets.MASTER_SSH_KEY }}" > ~/master/.ssh/id_rsa
-          echo "${{ secrets.WORKER_SSH_KEY }}" > ~/worker/.ssh/id_rsa
-          chmod 600 ~/master/.ssh/id_rsa
-          chmod 600 ~/worker/.ssh/id_rsa
+          # Create SSH directories
+          mkdir -p ~/.ssh
+          mkdir -p ./ssh_keys
+          
+          # Create master SSH key
+          echo "${{ secrets.MASTER_SSH_PRIVATE_KEY }}" > ./ssh_keys/master_key
+          chmod 600 ./ssh_keys/master_key
+          
+          # Create worker SSH key (if needed)
+          echo "${{ secrets.WORKER_SSH_PRIVATE_KEY }}" > ./ssh_keys/worker_key
+          chmod 600 ./ssh_keys/worker_key
+          
+          # Add hosts to known_hosts to avoid verification errors
+          ssh-keyscan -H 4.211.249.189 >> ~/.ssh/known_hosts
 
       - name: Install Ansible
         run: |
           sudo apt-get update
-          sudo apt-get install -y ansible
+          sudo apt-get install -y ansible sshpass
 
       - name: Create inventory file
         run: |
           cat > ./ansible/inventory.ini <<EOF
           [master]
-          4.211.249.189 ansible_connection=ssh ansible_user=jenkins_master ansible_ssh_private_key_file=~/master/.ssh/id_rsa
+          4.211.249.189 ansible_connection=ssh ansible_user=jenkins_master ansible_ssh_private_key_file=./ssh_keys/master_key
+
+          [all:vars]
+          ansible_ssh_common_args='-o StrictHostKeyChecking=no'
           EOF
+
+          # Test SSH connection
+          echo "Testing SSH connection..."
+          ssh -i ./ssh_keys/master_key -o StrictHostKeyChecking=no jenkins_master@4.211.249.189 "echo 'SSH connection successful'"
+
+      - name: Validate Ansible inventory
+        working-directory: ./ansible
+        run: |
+          ansible-inventory -i inventory.ini --list
 
       - name: Run Ansible playbook
         working-directory: ./ansible
         run: |
-          ansible-playbook -i inventory.ini playbooks/main.yml
+          ansible-playbook -i inventory.ini playbooks/main.yml -v
+        env:
+          ANSIBLE_HOST_KEY_CHECKING: False
+
+      - name: Cleanup SSH keys
+        if: always()
+        run: |
+          rm -f ./ssh_keys/master_key
+          rm -f ./ssh_keys/worker_key
+          echo "SSH keys cleaned up"
