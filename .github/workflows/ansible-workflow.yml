@@ -20,11 +20,11 @@ jobs:
           mkdir -p ./ssh_keys
           
           # Create master SSH key
-          echo "${{ secrets.MASTER_SSH_PRIVATE_KEY }}" > ./ssh_keys/master_key
+          echo "${{ secrets.MASTER_SSH_PRIVATE_KEY }}" | base64 --decode > ./ssh_keys/master_key
           chmod 600 ./ssh_keys/master_key
           
           # Create worker SSH key (if needed)
-          echo "${{ secrets.WORKER_SSH_PRIVATE_KEY }}" > ./ssh_keys/worker_key
+          echo "${{ secrets.WORKER_SSH_PRIVATE_KEY }}" | base64 --decode > ./ssh_keys/worker_key
           chmod 600 ./ssh_keys/worker_key
           
           # Add hosts to known_hosts to avoid verification errors
@@ -40,14 +40,11 @@ jobs:
           cat > ./ansible/inventory.ini <<EOF
           [master]
           4.211.249.189 ansible_connection=ssh ansible_user=jenkins_master ansible_ssh_private_key_file=./ssh_keys/master_key
-
-          [all:vars]
-          ansible_ssh_common_args='-o StrictHostKeyChecking=no'
           EOF
 
           # Test SSH connection
           echo "Testing SSH connection..."
-          ssh -i ./ssh_keys/master_key -o StrictHostKeyChecking=no jenkins_master@4.211.249.189 "echo 'SSH connection successful'"
+          ssh -i ./ssh_keys/master_key jenkins_master@4.211.249.189 "echo 'SSH connection successful'"
 
       - name: Validate Ansible inventory
         working-directory: ./ansible
