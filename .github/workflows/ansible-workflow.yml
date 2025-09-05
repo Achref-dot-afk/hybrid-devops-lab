@@ -22,7 +22,7 @@ jobs:
           mkdir -p ./ssh_keys
           
           # Create master SSH key
-          echo "$MASTER_SSH_PRIVATE_KEY" > ./ssh_keys/master_key
+          echo "${MASTER_SSH_PRIVATE_KEY}" | tr -d '\r' > ./ssh_keys/master_key
           chmod 600 ./ssh_keys/master_key
           file ./ssh_keys/master_key
 
