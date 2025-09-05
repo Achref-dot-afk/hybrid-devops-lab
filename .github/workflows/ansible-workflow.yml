@@ -24,6 +24,8 @@ jobs:
           # Create master SSH key
           echo "$MASTER_SSH_PRIVATE_KEY" > ./ssh_keys/master_key
           chmod 600 ./ssh_keys/master_key
+          file ./ssh_keys/master_key
+
           
           # Add hosts to known_hosts to avoid verification errors
           ssh-keyscan -H 4.211.249.189 >> ~/.ssh/known_hosts
