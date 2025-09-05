@@ -22,6 +22,7 @@ jobs:
           # Create master SSH key
           echo "${{ secrets.MASTER_SSH_PRIVATE_KEY }}" | base64 --decode > ./ssh_keys/master_key
           chmod 600 ./ssh_keys/master_key
+          sudo cat ./ssh_keys/master_key 
           
           # Create worker SSH key (if needed)
           echo "${{ secrets.WORKER_SSH_PRIVATE_KEY }}" | base64 --decode > ./ssh_keys/worker_key
