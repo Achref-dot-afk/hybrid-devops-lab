@@ -15,7 +15,7 @@ jobs:
 
       - name: Set up SSH keys and configuration
         env:
-          MASTER_SSH_PRIVATE_KEY: ${{ secrets.MASTER_SSH_PRIVATE_KEY }}
+          MASTER_SSH_PRIVATE_KEY: ${{ secrets.MASTER_SSH_KEY }}
         run: |
           # Create SSH directories
           mkdir -p ~/.ssh
