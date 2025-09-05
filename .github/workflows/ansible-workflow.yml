@@ -22,7 +22,7 @@ jobs:
           mkdir -p ./ssh_keys
           
           # Create master SSH key
-          echo "$MASTER_SSH_PRIVATE_KEY" | base64 --decode > ./ssh_keys/master_key
+          echo "$MASTER_SSH_PRIVATE_KEY" > ./ssh_keys/master_key
           chmod 600 ./ssh_keys/master_key
           
           # Add hosts to known_hosts to avoid verification errors
