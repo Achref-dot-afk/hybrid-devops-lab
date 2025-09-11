@@ -4,19 +4,25 @@
     upgrade: dist
   become: true
 
+- name: Install aptitude
+  apt:
+    name: aptitude
+    state: latest
+    update_cache: true
+
 - name: Install common packages
   apt:
     name:
       - git
       - curl
       - vim
+      - apt-transport-https
       - unzip
-    state: present
-  become: true
-
-- name: Install Docker CE 
-  apt:
-    name: docker
+      - ca-certificates
+      - software-properties-common
+      - python3-pip
+      - virtualenv
+      - python3-setuptools
     state: present
   become: true
 
