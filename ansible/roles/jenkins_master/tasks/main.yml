@@ -6,7 +6,7 @@
 
 - name: Convert key to binary format
   ansible.builtin.command:
-    cmd: gpg --dearmor -o /usr/share/keyrings/jenkins-key.gpg /usr/share/keyrings/jenkins-key.asc
+    cmd: gpg --dearmor -o /usr/share/keyrings/jenkins-key.gpg /usr/share/keyrings/jenkins-keyring.asc
   args:
     creates: /usr/share/keyrings/jenkins-key.gpg
   become: true
@@ -14,9 +14,7 @@
 - name: Append Jenkins repository to sources list
   ansible.builtin.apt_repository:
     name: jenkins
-    baseurl: https://pkg.jenkins.io/debian-stable/
-    gpgcheck: yes
-    enabled: yes
+    repo: deb [signed-by=/usr/share/keyrings/jenkins-key.gpg] https://pkg.jenkins.io/debian-stable binary/
   become: true
 
 - name: Install Jenkins
