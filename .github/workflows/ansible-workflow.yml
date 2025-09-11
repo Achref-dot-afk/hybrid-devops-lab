@@ -2,8 +2,6 @@ name: Ansible Deploy
 
 on:
   workflow_dispatch:
-  push:
-    branches: [ main, master ]
 
 jobs:
   deploy:
@@ -28,7 +26,7 @@ jobs:
 
           
           # Add hosts to known_hosts to avoid verification errors
-          ssh-keyscan -H 4.211.249.189 >> ~/.ssh/known_hosts
+          ssh-keyscan -H 4.178.183.215 >> ~/.ssh/known_hosts
 
       - name: Install Ansible
         run: |
