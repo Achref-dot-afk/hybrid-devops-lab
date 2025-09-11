@@ -1,12 +1,18 @@
-- name: Add Jenkins repository key
+- name: Download Jenkins repo key
   ansible.builtin.get_url:
     url: https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
     dest: /usr/share/keyrings/jenkins-keyring.asc
   become: true
 
-- name: Append Jenkins repository to sources list
+- name: Convert key to GPG format
+  ansible.builtin.command:
+    cmd: gpg --dearmor -o /usr/share/keyrings/jenkins-keyring.gpg /usr/share/keyrings/jenkins-keyring.asc
+    creates: /usr/share/keyrings/jenkins-keyring.gpg
+  become: true
+
+- name: Add Jenkins repository
   ansible.builtin.apt_repository:
-    repo: deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/
+    repo: deb [signed-by=/usr/share/keyrings/jenkins-keyring.gpg] https://pkg.jenkins.io/debian-stable binary/
   become: true
 
 - name: Install Jenkins
