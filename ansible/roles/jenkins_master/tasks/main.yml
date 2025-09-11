@@ -2,7 +2,6 @@
   ansible.builtin.get_url:
     url: https://pkg.jenkins.io/debian-stable/jenkins.io.key
     dest: /usr/share/keyrings/jenkins-keyring.asc
-    state: present
   become: true
 
 - name: Convert key to binary format
