@@ -37,13 +37,13 @@ jobs:
         run: |
           cat > ./ansible/inventory.ini <<EOF
           [master]
-          4.211.249.189 ansible_user=jenkins_master ansible_ssh_private_key_file=/home/runner/work/hybrid-devops-lab/hybrid-devops-lab/ssh_keys/master_key
+          4.178.183.215 ansible_user=jenkins_master ansible_ssh_private_key_file=/home/runner/work/hybrid-devops-lab/hybrid-devops-lab/ssh_keys/master_key
 
           EOF
 
           # Test SSH connection
           echo "Testing SSH connection..."
-          ssh -i ./ssh_keys/master_key jenkins_master@4.211.249.189 "echo 'SSH connection successful'"
+          ssh -i ./ssh_keys/master_key jenkins_master@4.178.183.215 "echo 'SSH connection successful'"
 
       - name: Validate Ansible inventory
         working-directory: ./ansible
