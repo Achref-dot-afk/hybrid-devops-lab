@@ -43,7 +43,7 @@ jobs:
 
           # Test SSH connection
           echo "Testing SSH connection..."
-          ssh -i ./ssh_keys/master_key jenkins_master@$(hostname -I) -I "echo 'SSH connection successful'"
+          ssh -i ./ssh_keys/master_key jenkins_master@$(hostname -I) -I "echo 'SSH connection success'"
 
       - name: Validate Ansible inventory
         working-directory: ./ansible
