@@ -26,7 +26,7 @@ jobs:
 
           
           # Add hosts to known_hosts to avoid verification errors
-          ssh-keyscan -H MASTER_IP >> ~/.ssh/known_hosts
+          ssh-keyscan -H $(hostname -I) >> ~/.ssh/known_hosts
 
       - name: Install Ansible
         run: |
@@ -37,13 +37,13 @@ jobs:
         run: |
           cat > ./ansible/inventory.ini <<EOF
           [master]
-          MASTER_IP ansible_user=jenkins_master ansible_ssh_private_key_file=/home/runner/work/hybrid-devops-lab/hybrid-devops-lab/ssh_keys/master_key
+          $(hostname -I) ansible_user=jenkins_master ansible_ssh_private_key_file=/home/runner/work/hybrid-devops-lab/hybrid-devops-lab/ssh_keys/master_key
 
           EOF
 
           # Test SSH connection
           echo "Testing SSH connection..."
-          ssh -i ./ssh_keys/master_key jenkins_master@MASTER_IP "echo 'SSH connection successful'"
+          ssh -i ./ssh_keys/master_key jenkins_master@$(hostname -I) -I "echo 'SSH connection successful'"
 
       - name: Validate Ansible inventory
         working-directory: ./ansible

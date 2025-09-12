@@ -105,10 +105,4 @@ jobs:
         run: |
           terraform apply -input=false -auto-approve tfplan.binary 
 
-      - name: Store jenkins master public IP
-        if: success()
-        working-directory: ./Infrastructure
-        run: |
-          echo "JENKINS_MASTER_PUBLIC_IP=$(terraform output -raw jenkins_master_public_ip)"
-          sed '-i g/MASTER_IP/${JENKINS_MASTER_PUBLIC_IP}/' ../.github/workflows/ansible-workflow.yml
 
