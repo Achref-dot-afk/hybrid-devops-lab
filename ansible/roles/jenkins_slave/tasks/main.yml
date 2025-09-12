@@ -1,0 +1,17 @@
+- name: Generate SSH key pair
+  ansible.builtin.openssh_keypair:
+    path: /home/jenkins_worker/.ssh/id_rsa
+    type: rsa
+    size: 4096
+    owner: jenkins_worker
+    group: jenkins_worker
+    mode: '0600'
+  become: true
+
+- name: Display the public key
+  ansible.builtin.command:
+    cmd: cat /home/jenkins_worker/.ssh/id_rsa.pub
+  register: public_key
+  become: true
+
+

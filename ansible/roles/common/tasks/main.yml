@@ -15,7 +15,6 @@
     name:
       - git
       - curl
-      - vim
       - apt-transport-https
       - unzip
       - ca-certificates
