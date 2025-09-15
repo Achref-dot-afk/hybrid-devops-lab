@@ -10,7 +10,7 @@ env:
   LOCATION: francecentral
   STORAGE_ACCOUNT: storageacc2204
   CONTAINER_NAME: tfstate
-  ENV: ${{ vars.ENV_TYPE }} # dev, preprod, prod
+  ENV: ${{ vars.ENV_TYPE }} # dev, prod
 
 permissions:
   id-token: write
