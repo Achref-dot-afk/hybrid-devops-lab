@@ -5,7 +5,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: github-runner
 
     steps:
       - name: Checkout repository
@@ -41,7 +41,7 @@ jobs:
           [master]
           ${{vars.MASTER_IP}} ansible_user=jenkins_master ansible_ssh_private_key_file=/home/runner/work/hybrid-devops-lab/hybrid-devops-lab/ssh_keys/master_key
           [slaves]
-          10.0.10.4 ansible_user=jenkins_worker ansible_ssh_private_key_file=./ssh_keys/worker_key ansible_ssh_common_args='-o ProxyJump=jenkins_master@${{vars.MASTER_IP}}'
+          ${{vars.WORKER_IP}} ansible_user=jenkins_worker ansible_ssh_private_key_file=/home/runner/work/hybrid-devops-lab/hybrid-devops-lab/ssh_keys/worker_key
           EOF
 
           # Test SSH connection
