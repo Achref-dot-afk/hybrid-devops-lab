@@ -34,7 +34,7 @@ variable "ssh_key" {
 variable "worker_ssh_key" {
   description = "SSH public key of worker node"
   type = string
-  default = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCupF1jr1MkZMmvKU+9VNYaPbsHFrwRwXnQVFB/2oRKaMl0iQaA9j0o+9bqhM+9InmWLRZGe4cPfOnHJvUPlP7iSja5ur7Wb6W9hggRDnphXOpNAit6DGachKBXPeGiI16kcXG7Nv1EvjJp2UpPTzfvlU1N5ZvGfpxfvya2eVQKPUuErq1IBgUkh174UTSWGDt2XW88Q09Ejrd6xvHNiy3JnTQlPW64NIdg81JsolTnNUzUIJPEc0yeEkB4OaU2U9hdDr8STOsGncTxDtuS4r9jvGDuaAeLp7CeI2Mr+dVjILkQQ3/ntOK2alTHJfARaRcGuPKNZFTyZsrSfJlfYZe1 rsa-key-20250828"
+  default = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCLjiVaMPA3wXr97CDX0kk1rlBzW6CN0lyFRoPPJKarcpbeyN1YAWEigA6oF4HiAKxJ7QYxBA/QP72J6wZvF1vZ/4zb6yDfcXNRGqsb22k6tCF4ryxeGSdaX+4NrasK0bNuwkPtwDMb8PJmwX8vznmeICcRCRI5MYLJH7M6maGs/T1P6VcBXqWP63FdCAZ+baLH4gWGTb+E/My9msEGor0+vCaTF582SwbXXKpD4LBukU+KvEdg+m8IGmHIGoOObpj0f+md6fpr3xDQtgq4nDlSCpvDj9STEwjNSZAQY+X8rJDS4ElQW4Ct5sCBKyQxb8S3RiTv6rLDHMtUj7lBEpTf rsa-key-20250917"
   
 }
 
