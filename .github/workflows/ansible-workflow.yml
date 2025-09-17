@@ -23,7 +23,6 @@ jobs:
           # Create master SSH key
           echo "${MASTER_SSH_PRIVATE_KEY}" | tr -d '\r' > ./ssh_keys/master_key
           echo "${WORKER_SSH_PRIVATE_KEY}" | tr -d '\r' > ./ssh_keys/worker_key
-          file ./ssh_keys/worker_key
           chmod 600 ./ssh_keys/master_key
           chmod 600 ./ssh_keys/worker_key
           # Add hosts to known_hosts to avoid verification errors

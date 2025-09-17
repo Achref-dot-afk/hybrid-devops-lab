@@ -12,4 +12,4 @@
   gather_facts: true
   roles:
     - common
-    - jenkins_worker
+    - jenkins_slave
