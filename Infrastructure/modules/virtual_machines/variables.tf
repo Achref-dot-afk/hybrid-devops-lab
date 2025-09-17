@@ -39,7 +39,7 @@ variable "worker_ssh_key" {
 }
 
 variable "nsg_rules" {
-  description = "List of NSG rules"
+  description = "List of NSG Rules"
   type = list(object({
     name                       = string
     priority                   = number
