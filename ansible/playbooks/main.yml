@@ -7,7 +7,7 @@
     - jenkins_master
 
 - name: Configure Jenkins Workers
-  hosts: workers
+  hosts: slaves
   become: true
   gather_facts: true
   roles:
